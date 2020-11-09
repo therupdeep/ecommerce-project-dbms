@@ -4,5 +4,5 @@ This repository contains all the materials used in the making of the E-commerce 
 
 ## Updates Required
 
-1. Remove the online shopping site entity from the ERD diagram.
+1. Remove the online shopping site entity from the ERD diagram as we cannot make the Online Shopping site table with no attributes. Also remove its relationships with other tables.
 2. @Susnato implement the cardinality changes described in cardinality.md
