@@ -1,0 +1,5 @@
+Cart ----> Cart Item (1 -> n)
+Product ----> Cart Item (1 -> n)
+Category ----> Product (1 -> n)
+Transaction ----> Cart (n -> 1)
+Customer ----> Transaction (1 -> n)
