@@ -18,14 +18,14 @@ create table Transaction
     transaction_id varchar(7) constraint pk3 primary key,
     transaction_date date not null,
     total_amount number(6),
-    customer_id varchar(7) not null constraint fk2 references Customer(customer_id)
+    customer_id varchar(7) not null constraint fk2 references Customer(customer_id),
     cart_id varchar(7) not null constraint fk3 references Cart(cart_id)
 );
 
 create table Category
 (
 	category_id varchar(7) constraint pk4 primary key,
-	category_name varchar(20) not null,
+	category_name varchar(20) not null
 );
 
 create table Product
