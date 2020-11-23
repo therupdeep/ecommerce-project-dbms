@@ -12,6 +12,8 @@
 3. Phone_no
 4. Address
 5. Cart_Id(FK to Cart(Cart_Id))
+6. Username
+7. Password
 
 ## Transaction
 

@@ -3,3 +3,4 @@
 3. Category ----> Product (1 -> n)
 4. Transaction ----> Cart (n -> 1)
 5. Customer ----> Transaction (1 -> n)
+6. Customer ----> Products(1 -> n)
