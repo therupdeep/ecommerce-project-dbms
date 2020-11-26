@@ -18,7 +18,7 @@ begin
 	 end loop;
 	 while phone_number = t.phone_number loop
 	 	--insert custom string "Phone Number is taken plz enter different phone number"
-	 	password := &phone_number;
+	 	phone_number := &phone_number;
 	 end loop;
 	end loop;
 	--insert into table customer the new values and print successfully registered
