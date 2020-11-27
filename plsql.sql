@@ -22,3 +22,21 @@ begin
 	dbms_output.put_line('You are successfully registered');
 end;
 /
+
+create or replace procedure login(
+    username   varchar2,
+    password    varchar2
+)
+is
+
+begin 
+    
+    for t in(select usernam,passwd from customer2) loop
+        if username = t.username and password = t.password then
+                dbms_output.put_line('Login Successful');
+        else
+                dbms_output.put_line('Login Unsuccessful');
+        end if;
+    end loop;
+end;
+/
