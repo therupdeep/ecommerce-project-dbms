@@ -5,37 +5,36 @@ create or replace procedure register(
 	username varchar2,
 	password varchar2
 ) 
-is
+as
 begin
 	for t in (select username,phone_number from customer) loop
-	 while username = t.username loop
+	 if username = t.username then
 	 	dbms_output.put_line('Enter different Username. This username already exists');
-	 	return;
-	 end loop;
-	 while phone_number = t.phone_number loop
+	 end if;
+	 if phone_number = t.phone_number then
 	 	dbms_output.put_line('Enter different Phone Number. This phone number is taken');
-	 	return;
-	 end loop;
+	 end if;
 	end loop;
 	--set customer id and cart id here
 	--insert values into customer table
 	dbms_output.put_line('You are successfully registered');
+	login(username,password);
 end;
 /
 
 create or replace procedure login(
-    username   varchar2,
-    password    varchar2
+    username  varchar2,
+    password  varchar2
 )
-is
-
+as
 begin 
-    
-    for t in(select usernam,passwd from customer2) loop
+    for t in (select username,password from customer) loop
         if username = t.username and password = t.password then
-                dbms_output.put_line('Login Successful');
+            dbms_output.put_line('You are logged in');
+            return;
         else
-                dbms_output.put_line('Login Unsuccessful');
+            dbms_output.put_line('Login Unsuccessful');
+            return;
         end if;
     end loop;
 end;
