@@ -13,6 +13,7 @@ begin
 	 end if;
 	 if phone_number = t.phone_number then
 	 	dbms_output.put_line('Enter different Phone Number. This phone number is taken');
+	 	return;
 	 end if;
 	end loop;
 	--set customer id and cart id here
@@ -32,10 +33,8 @@ begin
         if username = t.username and password = t.password then
             dbms_output.put_line('You are logged in');
             return;
-        else
-            dbms_output.put_line('Login Unsuccessful');
-            return;
         end if;
     end loop;
+    dbms_output.put_line('Login Unsuccessful');
 end;
 /
