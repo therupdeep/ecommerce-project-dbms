@@ -1,10 +1,10 @@
 set serveroutput on;
 declare 
-	Name customer.name%type;
-	Address customer.address%type;
-	Phone_Number customer.phone_number%type;
-	Username customer.username%type;
-	Password customer.password%type;
+	Name varchar2(20);
+	Address varchar2(20);
+	Phone_Number number(10);
+	Username varchar2(20);
+	Password varchar2(20);
 begin
 	Name := '&Name';
 	Address := '&Address';
