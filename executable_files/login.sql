@@ -1,7 +1,7 @@
 set serveroutput on;
 declare 
-	Username varchar2(20);
-	Password varchar2(20);
+	Username customer.username%type;
+	Password customer.password%type;
 begin
 	Username := '&Username';
 	Password := '&Password';
