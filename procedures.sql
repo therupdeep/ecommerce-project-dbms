@@ -50,7 +50,7 @@ begin
     for t in (select username,password from customer) loop
         if username = t.username and password = t.password then
             dbms_output.put_line('You are logged in');
-            show_balance(username,password);
+            show_balance(username);
             return;
         end if;
     end loop;
