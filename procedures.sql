@@ -73,3 +73,20 @@ exception
 		dbms_output.put_line('User not found');
 end;
 /
+					
+					
+create or replace procedure addmoney(
+		money customer.wallet%type,
+		username1 customer.username%type
+)
+as
+		poisha customer.wallet%type;
+begin
+	select wallet into poisha
+	from customer
+	where username=username1;	
+	poisha=poisha+money
+	wallet=wallet+poisha;
+	show_balance(username,password);
+end;
+/
