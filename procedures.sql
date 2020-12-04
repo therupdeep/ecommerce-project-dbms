@@ -88,5 +88,5 @@ begin
 	poisha=poisha+money
 	wallet=wallet+poisha;
 	show_balance(username,password);
-end;
+end; 
 /
