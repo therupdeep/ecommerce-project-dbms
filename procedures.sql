@@ -85,8 +85,7 @@ begin
 	select wallet into poisha
 	from customer
 	where username=username1;	
-	poisha=poisha+money
-	wallet=wallet+poisha;
-	show_balance(username,password);
+	poisha:=poisha+money;
+	show_balance(username);
 end; 
 /
