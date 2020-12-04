@@ -1,9 +1,8 @@
 set serveroutput on;
 declare
-		money number;
+		money customer.wallet%type;
 begin
-		dbms_output.put_line('Add the amount');
    		money:='&money';
-   		addmoney(money);
+   		addmoney(money,username);
 end;
 /
