@@ -34,7 +34,6 @@ begin
 		new_customer_id:='cst'||(to_number(substr(max_customer_id,3))+1);
 		new_cart_id:='crt'||(to_number(substr(max_cart_id,3))+1);
 	end if;
-	dbms_output.put_line(new_cart_id);
 	insert into cart values(new_cart_id,0);
 	insert into customer values(new_customer_id,name,address,phone_number,username,password,0,new_cart_id);
 	dbms_output.put_line('You are successfully registered');
@@ -60,15 +59,14 @@ end;
 /
 
 create or replace procedure show_balance(
-	username1 customer.username%type,
-	password1 customer.password%type
+	username1 customer.username%type
 )
 as 
 	balance customer.wallet%type;
 begin
 	select wallet into balance
 	from customer
-	where username = username1 and password = password1;
+	where username = username1;
 	dbms_output.put_line('Current balance : '||balance);
 exception
 	when no_data_found then
