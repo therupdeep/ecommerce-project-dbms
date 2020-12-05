@@ -75,7 +75,7 @@ insert into Category values
 );
 insert into Category values
 (
-	'ctg7','Office Suplies'
+	'ctg7','Office Supplies'
 );
 insert into Category values
 (
@@ -85,7 +85,4 @@ insert into Category values
 (
 	'ctg9','Travel Accessories'
 );
-insert into Category values
-(
-	'ctg10','Home Entertainment'
-);
+
