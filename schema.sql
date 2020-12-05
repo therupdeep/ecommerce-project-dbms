@@ -47,3 +47,45 @@ create table Cart_Item
     quantity number(1) not null,
     cart_id varchar(7) not null constraint fk6 references Cart(cart_id)
 );
+
+
+insert into Category values
+(
+	'ctg1','Laptops'
+);
+insert into Category values
+(
+	'ctg2','Watches'
+);
+insert into Category values
+(
+	'ctg3','Books'
+);
+insert into Category values
+(
+	'ctg4','Home & Kitchen'
+);
+insert into Category values
+(
+	'ctg5','Baby Products'
+);
+insert into Category values
+(
+	'ctg6','Sports'
+);
+insert into Category values
+(
+	'ctg7','Office Suplies'
+);
+insert into Category values
+(
+	'ctg8','Home Entertainment'
+);
+insert into Category values
+(
+	'ctg9','Travel Accessories'
+);
+insert into Category values
+(
+	'ctg10','Home Entertainment'
+);
