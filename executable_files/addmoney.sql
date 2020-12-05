@@ -1,10 +1,10 @@
 set serveroutput on;
-accept money customer.wallet%type prompt 'Enter the amount you want to add in your wallet';
+accept amount number prompt 'Enter the amount you want to add in your wallet';
 declare
-		money customer.wallet%type;
+		amount number;
 		username customer.username%type;
 begin
-   		money:='&money';
+   		amount:=&amount;
 		username:='&username';
 		show_balance(username);
    		addmoney(money,username);
