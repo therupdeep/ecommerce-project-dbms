@@ -14,6 +14,7 @@
 5. Cart_Id(FK to Cart(Cart_Id))
 6. Username
 7. Password
+8. Wallet
 
 ## Transaction
 
