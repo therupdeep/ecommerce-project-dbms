@@ -7,8 +7,8 @@ create table Cart
 create table Customer
 (
     customer_id varchar(7) constraint pk2 primary key,
-    name varchar(20) not null,
-    address varchar(20) not null,
+    name varchar(30) not null,
+    address varchar(50) not null,
     phone_number number(10) not null,
     username varchar(20) not null,
     password varchar(20) not null,
