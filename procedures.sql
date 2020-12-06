@@ -89,6 +89,6 @@ begin
 	else
 		dbms_output.put_line('Wallet Updated!');
 	end if;
-	show_balance(username);	
+	show_balance(username1);	
 end; 
 /
