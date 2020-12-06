@@ -4,7 +4,8 @@ This repository contains all the materials used in the making of the E-commerce 
 
 ## Updates Required
 
-1. [executable_files](https://github.com/therupdeep/ecommerce-project-dbms/blob/main/executable_files) folder has files which have to executed by the user to perform an action like login,register,etc.
+1. add_to_cart,checkout procedures to be added. Register,login,show_balance,addmoney working.
+2. [executable_files](https://github.com/therupdeep/ecommerce-project-dbms/blob/main/executable_files) folder has files which have to executed by the user to perform an action like login,register,etc.
 3. ~~@Susnato implement the cardinality changes described in cardinality.md~~
 4. ~~Remove the online shopping site entity from the ERD diagram as we cannot make the Online Shopping site table with no attributes. Also remove its relationships with other tables.~~
 
