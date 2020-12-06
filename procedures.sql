@@ -87,7 +87,7 @@ begin
 	if sql%rowcount != 1 then
 		dbms_output.put_line('User not found');
 	else
-		dbms_output.put_line("Wallet Updated!");
+		dbms_output.put_line('Wallet Updated!');
 	end if;
 	show_balance(username);	
 end; 
