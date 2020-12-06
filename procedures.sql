@@ -81,7 +81,7 @@ create or replace procedure addmoney(
 )
 as
 begin
-	update table customer
+	update customer
 	set wallet = wallet+amount
 	where username = username1;
 	if sql%rowcount != 1 then
