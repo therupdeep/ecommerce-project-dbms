@@ -86,6 +86,7 @@ begin
 	from customer
 	where username=username1;	
 	poisha:=poisha+money;
+	alter table customer add poisha wallet;
 	show_balance(username);
 end; 
 /
