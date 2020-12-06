@@ -76,17 +76,19 @@ end;
 					
 					
 create or replace procedure addmoney(
-		money customer.wallet%type,
+		amount customer.wallet%type,
 		username1 customer.username%type
 )
 as
-		poisha customer.wallet%type;
 begin
-	select wallet into poisha
-	from customer
-	where username=username1;	
-	poisha:=poisha+money;
-	alter table customer add poisha wallet;
-	show_balance(username);
+	update table customer
+	set wallet = wallet+amount
+	where username = username1;
+	if sql%rowcount != 1 then
+		dbms_output.put_line('User not found');
+	else
+		dbms_output.put_line("Wallet Updated!");
+	end if;
+	show_balance(username);	
 end; 
 /
