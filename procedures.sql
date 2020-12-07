@@ -89,55 +89,56 @@ end;
 /
 
 create or replace procedure add_to_cart(
-	product_id1 cart_item.product_id%type,
-	quantity1 cart_item.quantity%type
+	product_id_input cart_item.product_id%type,
+	quantity_input cart_item.quantity%type
 )
 as
-	cart_id cart_item.cart_id%type;
+	cart_id_fetched cart_item.cart_id%type;
 begin
-	select cart_id into cart_id
+	select cart_id into cart_id_fetched
 	from customer
 	where username = global.username;
-	if product_id in (select product_id from cart_item) then
+	if product_id_input in (select product_id from cart_item where cart_id=cart_id_fetched) then
 		update cart_item
-		set quantity=quantity+quantity1;
-		where product_id = product_id1;
+		set quantity=quantity+quantity_input
+		where product_id = product_id_input and cart_id = cart_id_fetched;
 	else
-		insert into cart_item values(product_id1,quantity1,cart_id);
+		insert into cart_item values(product_id_input,quantity_input,cart_id_fetched);
 exception
 	when no_data_found then
 		dbms_output.put_line('User not found');
 end;
 /
 
-create or replace procedure delete(
-	    product_id customer.product_id%type;
-	    quantity customer.quantity%type;)
+create or replace procedure delete_from_cart(
+	    product_id_input cart_item.product_id%type;
+	    quantity_input cart_item.quantity%type;
+)
 as
- 		flag integer:=0;
+	cart_id_fetched cart_item.cart_id%type;
+	quantity_fetched cart_item.quantity%type;
 begin
-		for t in(select product_id from product) loop
-			if product_id != t.product_id then
-				flag:=1;
-			end if;
-		end loop;
-		for i in(select quantity from product) loop
-			if quantity<i.quantity then
-				flag :=1;
-			end if;
-		end loop;
-		if flag=1 then
-			dbms_output.put_line("Either product_id or quantity mentioned is invalid");
+	select cart_id into cart_id_fetched
+	from customer
+	where username = global.username;
+	if product_id_input in (select product_id from cart_item where cart_id=cart_id_fetched) then
+		select quantity into quantity_fetched
+		from cart_item
+		where product_id = product_id_input and cart_id=cart_id_fetched;
+		if (quantity_input < quantity_fetched) then
+			update cart_item
+			set quantity = quantity-quantity_input
+			where product_id = product_id_input and cart_id=cart_id_fetched;
+		elsif (quantity_input = quantity_fetched) then
+			delete from cart_item
+			where product_id = product_id_input and cart_id=cart_id_fetched;
 		else 
-			for i in(select quantity from product) loop
-				if quantity=i.quantity then
-					delete from cart_item
-					where product_id=product_id;
-				else if quantity>i.quantity then
-					delete from cart_item
-					where quantity=i.quantity;
-				end if;
-				dbms_output.put_line("Deleted Successfully");
-			end loop;
+			dbms_output.put_line('Number of items to be deleted exceeding quantity of the product present in cart');
 		end if;
+	else 
+		dbms_output.put_line('Product is not added to cart');
+	end if;
+exception
+	when no_data_found then
+		dbms_output.put_line('User not found');
 end;
