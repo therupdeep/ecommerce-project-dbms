@@ -96,6 +96,28 @@ begin
 end; 
 /
 
+create or replace procedure add_to_cart(
+	product_id1 cart_item.product_id%type,
+	quantity1 cart_item.quantity%type
+)
+as
+	cart_id cart_item.cart_id%type;
+begin
+	select cart_id into cart_id
+	from customer
+	where username = global.username;
+	if product_id in (select product_id from cart_item) then
+		update cart_item
+		set quantity=quantity+quantity1;
+		where product_id = product_id1;
+	else
+		insert into cart_item values(product_id1,quantity1,cart_id);
+exception
+	when no_data_found then
+		dbms_output.put_line('User not found');
+end;
+/
+
 create or replace procedure delete(
 	    product_id customer.product_id%type;
 	    quantity customer.quantity%type;)
