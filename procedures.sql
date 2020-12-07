@@ -95,3 +95,35 @@ begin
 	show_balance;	
 end; 
 /
+
+create or replace procedure delete(
+		product_id customer.product_id%type;
+	    quantity customer.quantity%type;)
+as
+ 		flag integer:=0;
+begin
+		for t in(select product_id from product) loop
+			if product_id != t.product_id then
+				flag:=1;
+			end if;
+		end loop;
+		for i in(select quantity from product) loop
+			if quantity<i.quantity then
+				flag :=1;
+			end if;
+		end loop;
+		if flag=1 then
+			dbms_output.put_line("Either product_id or quantity mentioned is invalid");
+		else 
+			for i in(select quantity from product) loop
+				if quantity=i.quantity then
+					delete from cart_item
+					where product_id=product_id;
+				else if quantity>i.quantity then
+					delete from cart_item
+					where quantity=i.quantity;
+				end if;
+				dbms_output.put_line("Deleted Successfully");
+			end loop;
+		end if;
+end;
