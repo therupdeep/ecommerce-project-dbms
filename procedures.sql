@@ -55,7 +55,8 @@ begin
     for t in (select username,password from customer) loop
         if username = t.username and password = t.password then
             dbms_output.put_line('You are logged in');
-            show_balance(username);
+            global.username := username;
+            show_balance;
             return;
         end if;
     end loop;
@@ -63,15 +64,13 @@ begin
 end;
 /
 
-create or replace procedure show_balance(
-	username1 customer.username%type
-)
+create or replace procedure show_balance
 as 
 	balance customer.wallet%type;
 begin
 	select wallet into balance
 	from customer
-	where username = username1;
+	where username = global.username;
 	dbms_output.put_line('Current balance : '||balance);
 exception
 	when no_data_found then
@@ -81,19 +80,18 @@ end;
 					
 					
 create or replace procedure addmoney(
-		amount customer.wallet%type,
-		username1 customer.username%type
+		amount customer.wallet%type
 )
 as
 begin
 	update customer
 	set wallet = wallet+amount
-	where username = username1;
+	where username = global.username;
 	if sql%rowcount != 1 then
 		dbms_output.put_line('User not found');
 	else
 		dbms_output.put_line('Wallet Updated!');
 	end if;
-	show_balance(username1);	
+	show_balance;	
 end; 
 /
