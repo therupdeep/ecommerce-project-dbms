@@ -1,3 +1,8 @@
+create or replace package global as
+	username customer.username%type;
+end global;
+/
+
 create or replace procedure register(
 	name customer.name%type,
 	address customer.address%type,
