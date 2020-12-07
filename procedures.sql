@@ -97,7 +97,7 @@ end;
 /
 
 create or replace procedure delete(
-		product_id customer.product_id%type;
+	    product_id customer.product_id%type;
 	    quantity customer.quantity%type;)
 as
  		flag integer:=0;
