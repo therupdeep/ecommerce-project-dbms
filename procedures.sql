@@ -11,17 +11,25 @@ create or replace procedure register(
 	password customer.password%type
 ) 
 is
+	flag integer:=0;
 	new_customer_id customer.customer_id%type;
 	new_cart_id customer.cart_id%type;
 	max_customer_id customer.customer_id%type;
 	max_cart_id customer.cart_id%type;
 begin
-	if username in (select username from customer) then
-		dbms_output.put_line('Enter different Username. This username already exists');
-	end if;
-	if phone_number in (select phone_number from customer) then
-		dbms_output.put_line('Enter different Phone Number. This phone number is taken');
-	end if;
+	for t in (select username,phone_number from customer) loop
+	 if username = t.username then
+	 	dbms_output.put_line('Enter different Username. This username already exists');
+	 	flag:=1;
+	 end if;
+	 if phone_number = t.phone_number then
+	 	dbms_output.put_line('Enter different Phone Number. This phone number is taken');
+	 	flag:=1;
+	 end if;
+	 if flag = 1 then
+	 	return;
+	 end if;
+	end loop;
 	select max(customer_id),max(cart_id) into max_customer_id,max_cart_id
 	from customer;
 	if max_customer_id is null then
@@ -148,7 +156,7 @@ begin
 			set quantity = quantity-quantity_input
 			where product_id = product_id_input and cart_id=cart_id_fetched;
 		--checking if quantity to be deleted is equal to quantity present in cart. If yes we delete the particular row
-		elseif (quantity_input = quantity_fetched) then
+		elsif (quantity_input = quantity_fetched) then
 			delete from cart_item
 			where product_id = product_id_input and cart_id=cart_id_fetched;
 		--checking if quantity to be deleted is greater than quantity present in cart. If yes we print the error
