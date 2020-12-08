@@ -241,3 +241,80 @@ insert into Product values
 (
 	'prod36','Protein Powder','Goldiluxe',10,229,'ctg6'
 );
+
+insert into Product values
+(
+	'prod37','Butterflow Pen','Cello',10,76,'ctg7'
+);
+insert into Product values
+(
+	'prod38','Notebook','Classmate',10,102,'ctg7'
+);
+insert into Product values
+(
+	'prod39','Calculator','Orpat',10,159,'ctg7'
+);
+insert into Product values
+(
+	'prod40','Scientific Calculator','Casio',10,500,'ctg7'
+);
+insert into Product values
+(
+	'prod41','Magnetic White Board','Nechams',10,699,'ctg7'
+);
+insert into Product values
+(
+	'prod42','Folder','OFIXO',10,149,'ctg7'
+);
+
+
+insert into Product values
+(
+	'prod43','DVD Player','iBell',10,2290,'ctg8'
+);
+insert into Product values
+(
+	'prod44','Soundbar','FD',10,999,'ctg8'
+);
+insert into Product values
+(
+	'prod45','Led Projector','Egate',10,8990,'ctg8'
+);
+insert into Product values
+(
+	'prod46','Smart TV','OnePlus',10,24999,'ctg8'
+);
+insert into Product values
+(
+	'prod47','Home Theater','Vemax',10,1590,'ctg8'
+);
+insert into Product values
+(
+	'prod48','Android Led TV','Mi',10,22499,'ctg8'
+);
+
+
+insert into Product values
+(
+	'prod49','Searchlight','Care 4',10,649,'ctg9'
+);
+insert into Product values
+(
+	'prod50','Mask','The Upfront Co.',10,500,'ctg9'
+);
+insert into Product values
+(
+	'prod51','Shoe Bag','Shoeshine',10,299,'ctg9'
+);
+insert into Product values
+(
+	'prod52','Umbrella','John"s Umbrella',10,399,'ctg9'
+);
+insert into Product values
+(
+	'prod53','Cosmetics kit','Fatmug',10,699,'ctg9'
+);
+insert into Product values
+(
+	'prod54','Eye Mask','Mediwave',10,350,'ctg9'
+);
