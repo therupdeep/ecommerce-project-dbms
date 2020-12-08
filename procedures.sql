@@ -120,6 +120,7 @@ begin
 			update cart_item
 			set quantity=quantity+quantity_input
 			where product_id = product_id_input and cart_id = cart_id_fetched;
+			flag=0;
 			exit;
 		else 
 			flag:=1;
@@ -184,6 +185,7 @@ begin
 				set total_cost=total_cost-price_fetched*quantity_input
 				where cart_id = cart_id_fetched;
 			end if;
+			flag=0;
 			exit;
 		else 
 			flag:=1;
