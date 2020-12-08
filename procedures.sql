@@ -148,7 +148,7 @@ begin
 			set quantity = quantity-quantity_input
 			where product_id = product_id_input and cart_id=cart_id_fetched;
 		--checking if quantity to be deleted is equal to quantity present in cart. If yes we delete the particular row
-		elsif (quantity_input = quantity_fetched) then
+		elseif (quantity_input = quantity_fetched) then
 			delete from cart_item
 			where product_id = product_id_input and cart_id=cart_id_fetched;
 		--checking if quantity to be deleted is greater than quantity present in cart. If yes we print the error
