@@ -102,6 +102,7 @@ create or replace procedure add_to_cart(
 	quantity_input cart_item.quantity%type
 )
 as
+	flag integer:=0;
 	cart_id_fetched cart_item.cart_id%type;
 	price_fetched product.price%type;
 begin
@@ -113,12 +114,19 @@ begin
 	select price into price_fetched
 	from product
 	where product_id = product_id_input;
-	--checking if product already exists in cart. If yes we increase quantity
-	if product_id_input in (select product_id from cart_item where cart_id=cart_id_fetched) then
-		update cart_item
-		set quantity=quantity+quantity_input
-		where product_id = product_id_input and cart_id = cart_id_fetched;
-	else
+	for t in (select product_id from cart_item where cart_id=cart_id_fetched) loop
+		--checking if product already exists in cart. If yes we increase quantity
+		if product_id_input = t.product_id then
+			update cart_item
+			set quantity=quantity+quantity_input
+			where product_id = product_id_input and cart_id = cart_id_fetched;
+			exit;
+		else 
+			flag:=1;
+		end if;
+	end loop;
+	--if product is not present in cart
+	if flag = 1 then
 		insert into cart_item values(product_id_input,quantity_input,cart_id_fetched);
 	end if;
 	--updating total cost of the cart items
@@ -136,6 +144,7 @@ create or replace procedure delete_from_cart(
 	    quantity_input cart_item.quantity%type;
 )
 as
+	flag integer:=0;
 	cart_id_fetched cart_item.cart_id%type;
 	quantity_fetched cart_item.quantity%type;
 	price_fetched product.price%type;
@@ -144,37 +153,44 @@ begin
 	select cart_id into cart_id_fetched
 	from customer
 	where username = global.username;
-	--checking if product exists in cart
-	if product_id_input in (select product_id from cart_item where cart_id=cart_id_fetched) then
-		--fetching quantity of the product present in cart
-		select quantity into quantity_fetched
-		from cart_item
-		where product_id = product_id_input and cart_id=cart_id_fetched;
-		--checking if quantity to be deleted is lesser than quantity present in cart. If yes we decrease quantity
-		if (quantity_input < quantity_fetched) then
-			update cart_item
-			set quantity = quantity-quantity_input
+	for t in (select product_id from cart_item where cart_id=cart_id_fetched) loop
+		--checking if product exists in cart
+		if product_id_input = t.product_id then
+			--fetching quantity of the product present in cart
+			select quantity into quantity_fetched
+			from cart_item
 			where product_id = product_id_input and cart_id=cart_id_fetched;
-		--checking if quantity to be deleted is equal to quantity present in cart. If yes we delete the particular row
-		elsif (quantity_input = quantity_fetched) then
-			delete from cart_item
-			where product_id = product_id_input and cart_id=cart_id_fetched;
-		--checking if quantity to be deleted is greater than quantity present in cart. If yes we print the error
+			--checking if quantity to be deleted is lesser than quantity present in cart. If yes we decrease quantity
+			if (quantity_input < quantity_fetched) then
+				update cart_item
+				set quantity = quantity-quantity_input
+				where product_id = product_id_input and cart_id=cart_id_fetched;
+			--checking if quantity to be deleted is equal to quantity present in cart. If yes we delete the particular row
+			elsif (quantity_input = quantity_fetched) then
+				delete from cart_item
+				where product_id = product_id_input and cart_id=cart_id_fetched;
+			--checking if quantity to be deleted is greater than quantity present in cart. If yes we print the error
+			else 
+				dbms_output.put_line('Number of items to be deleted exceeding quantity of the product present in cart');
+			end if;
+			--checking if updation is required in cart table
+			if (quantity_input <= quantity_fetched) then
+				--fetching price of product to be added
+				select price into price_fetched
+				from product
+				where product_id = product_id_input;
+				--updating total cost of the cart items
+				update cart
+				set total_cost=total_cost-price_fetched*quantity_input
+				where cart_id = cart_id_fetched;
+			end if;
+			exit;
 		else 
-			dbms_output.put_line('Number of items to be deleted exceeding quantity of the product present in cart');
+			flag:=1;
 		end if;
-		--checking if updation is required in cart table
-		if (quantity_input <= quantity_fetched) then
-			--fetching price of product to be added
-			select price into price_fetched
-			from product
-			where product_id = product_id_input;
-			--updating total cost of the cart items
-			update cart
-			set total_cost=total_cost-price_fetched*quantity_input
-			where cart_id = cart_id_fetched;
-		end if;
-	else 
+	end loop;
+	--if product is not present in cart
+	if flag = 1 then
 		dbms_output.put_line('Product to be deleted is not added to cart');
 	end if;
 exception
