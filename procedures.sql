@@ -102,7 +102,7 @@ create or replace procedure add_to_cart(
 	quantity_input cart_item.quantity%type
 )
 as
-	flag integer:=0;
+	flag integer;
 	cart_id_fetched cart_item.cart_id%type;
 	price_fetched product.price%type;
 begin
@@ -120,7 +120,7 @@ begin
 			update cart_item
 			set quantity=quantity+quantity_input
 			where product_id = product_id_input and cart_id = cart_id_fetched;
-			flag=0;
+			flag:=0;
 			exit;
 		else 
 			flag:=1;
@@ -145,7 +145,7 @@ create or replace procedure delete_from_cart(
 	    quantity_input cart_item.quantity%type;
 )
 as
-	flag integer:=0;
+	flag integer;
 	cart_id_fetched cart_item.cart_id%type;
 	quantity_fetched cart_item.quantity%type;
 	price_fetched product.price%type;
@@ -185,7 +185,7 @@ begin
 				set total_cost=total_cost-price_fetched*quantity_input
 				where cart_id = cart_id_fetched;
 			end if;
-			flag=0;
+			flag:=0;
 			exit;
 		else 
 			flag:=1;
