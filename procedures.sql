@@ -64,21 +64,6 @@ begin
 end;
 /
 
-create or replace procedure show_balance
-as 
-	balance customer.wallet%type;
-begin
-	select wallet into balance
-	from customer
-	where username = global.username;
-	dbms_output.put_line('Current balance : '||balance);
-exception
-	when no_data_found then
-		dbms_output.put_line('User not found');
-end;
-/
-					
-					
 create or replace procedure addmoney(
 		amount customer.wallet%type
 )
@@ -95,6 +80,20 @@ begin
 	end if;
 	show_balance;	
 end; 
+/
+
+create or replace procedure show_balance
+as 
+	balance customer.wallet%type;
+begin
+	select wallet into balance
+	from customer
+	where username = global.username;
+	dbms_output.put_line('Current balance : '||balance);
+exception
+	when no_data_found then
+		dbms_output.put_line('User not found');
+end;
 /
 
 create or replace procedure add_to_cart(
@@ -141,8 +140,8 @@ end;
 /
 
 create or replace procedure delete_from_cart(
-	    product_id_input cart_item.product_id%type;
-	    quantity_input cart_item.quantity%type;
+	    product_id_input cart_item.product_id%type,
+	    quantity_input cart_item.quantity%type
 )
 as
 	flag integer;
