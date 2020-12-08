@@ -1,7 +1,7 @@
 create table Cart 
 (
 	cart_id varchar(7) constraint pk1 primary key,
-	total_cost number(6)
+	total_cost number(7)
 );
 
 create table Customer
@@ -12,7 +12,7 @@ create table Customer
     phone_number number(10) not null,
     username varchar(20) not null,
     password varchar(20) not null,
-    wallet number(6) not null,
+    wallet number(7) not null,
     cart_id varchar(7) not null constraint fk1 references Cart(cart_id)
 );
 
@@ -20,7 +20,7 @@ create table Transaction
 (
     transaction_id varchar(7) constraint pk3 primary key,
     transaction_date date not null,
-    total_amount number(6),
+    total_amount number(7),
     customer_id varchar(7) not null constraint fk2 references Customer(customer_id),
     cart_id varchar(7) not null constraint fk3 references Cart(cart_id)
 );
@@ -37,14 +37,14 @@ create table Product
     product_name varchar(40) not null,
     brand varchar(30) not null,
     quantity number(2) not null,
-    price number(5) not null,
+    price number(6) not null,
     category_id varchar(7) not null constraint fk4 references Category(category_id)
 );
 
 create table Cart_Item
 (
     product_id varchar(7) constraint pk6 primary key constraint fk5 references Product(product_id),
-    quantity number(1) not null,
+    quantity number(2) not null,
     cart_id varchar(7) not null constraint fk6 references Cart(cart_id)
 );
 
