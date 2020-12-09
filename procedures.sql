@@ -74,7 +74,7 @@ begin
 	where username = global.username;
 	--when updation is not successful
 	if sql%rowcount != 1 then
-		dbms_output.put_line('User not found');
+		dbms_output.put_line('You are not logged in');
 	else
 		dbms_output.put_line('Wallet Updated!');
 	end if;
@@ -92,7 +92,7 @@ begin
 	dbms_output.put_line('Current balance : '||balance);
 exception
 	when no_data_found then
-		dbms_output.put_line('User not found');
+		dbms_output.put_line('You are not logged in');
 end;
 /
 
@@ -101,9 +101,9 @@ create or replace procedure add_to_cart(
 	quantity_input cart_item.quantity%type
 )
 as
-	flag integer;
 	cart_id_fetched cart_item.cart_id%type;
 	price_fetched product.price%type;
+	flag integer;
 begin
 	--fetching cart_id of the current customer
 	select cart_id into cart_id_fetched
@@ -113,29 +113,26 @@ begin
 	select price into price_fetched
 	from product
 	where product_id = product_id_input;
-	for t in (select product_id from cart_item where cart_id=cart_id_fetched) loop
-		--checking if product already exists in cart. If yes we increase quantity
-		if product_id_input = t.product_id then
-			update cart_item
-			set quantity=quantity+quantity_input
-			where product_id = product_id_input and cart_id = cart_id_fetched;
-			flag:=0;
-			exit;
-		else 
-			flag:=1;
-		end if;
-	end loop;
-	--if product is not present in cart
-	if flag = 1 then
+	--fetching count of rows containing the particular product in the current cart of the user
+	select count(*) into flag
+	from cart_item 
+	where cart_id=cart_id_fetched and product_id=product_id_input;
+	--checking if product already exists in cart. If yes we increase quantity
+	if flag=1 then
+		update cart_item
+		set quantity=quantity+quantity_input
+		where product_id = product_id_input and cart_id = cart_id_fetched;
+	else
 		insert into cart_item values(product_id_input,quantity_input,cart_id_fetched);
 	end if;
 	--updating total cost of the cart items
 	update cart
 	set total_cost=total_cost+price_fetched*quantity_input
 	where cart_id = cart_id_fetched;
+	dbms_output.put_line('Cart Updated');
 exception
 	when no_data_found then
-		dbms_output.put_line('User not found');
+		dbms_output.put_line('You are not logged in');
 end;
 /
 
@@ -144,58 +141,55 @@ create or replace procedure delete_from_cart(
 	    quantity_input cart_item.quantity%type
 )
 as
-	flag integer;
 	cart_id_fetched cart_item.cart_id%type;
 	quantity_fetched cart_item.quantity%type;
 	price_fetched product.price%type;
+	flag integer;
 begin
 	--fetching cart_id of the current customer
 	select cart_id into cart_id_fetched
 	from customer
 	where username = global.username;
-	for t in (select product_id from cart_item where cart_id=cart_id_fetched) loop
-		--checking if product exists in cart
-		if product_id_input = t.product_id then
-			--fetching quantity of the product present in cart
-			select quantity into quantity_fetched
-			from cart_item
+	--fetching count of rows containing the particular product in the current cart of the user
+	select count(*) into flag
+	from cart_item
+	where cart_id=cart_id_fetched and product_id=product_id_input;
+	--checking if product exists in cart
+	if flag=1 then
+		--fetching quantity of the product present in cart
+		select quantity into quantity_fetched
+		from cart_item
+		where product_id = product_id_input and cart_id=cart_id_fetched;
+		--checking if quantity to be deleted is lesser than quantity present in cart. If yes we decrease quantity
+		if (quantity_input < quantity_fetched) then
+			update cart_item
+			set quantity = quantity-quantity_input
 			where product_id = product_id_input and cart_id=cart_id_fetched;
-			--checking if quantity to be deleted is lesser than quantity present in cart. If yes we decrease quantity
-			if (quantity_input < quantity_fetched) then
-				update cart_item
-				set quantity = quantity-quantity_input
-				where product_id = product_id_input and cart_id=cart_id_fetched;
-			--checking if quantity to be deleted is equal to quantity present in cart. If yes we delete the particular row
-			elsif (quantity_input = quantity_fetched) then
-				delete from cart_item
-				where product_id = product_id_input and cart_id=cart_id_fetched;
-			--checking if quantity to be deleted is greater than quantity present in cart. If yes we print the error
-			else 
-				dbms_output.put_line('Number of items to be deleted exceeding quantity of the product present in cart');
-			end if;
-			--checking if updation is required in cart table
-			if (quantity_input <= quantity_fetched) then
-				--fetching price of product to be added
-				select price into price_fetched
-				from product
-				where product_id = product_id_input;
-				--updating total cost of the cart items
-				update cart
-				set total_cost=total_cost-price_fetched*quantity_input
-				where cart_id = cart_id_fetched;
-			end if;
-			flag:=0;
-			exit;
+		--checking if quantity to be deleted is equal to quantity present in cart. If yes we delete the particular row
+		elsif (quantity_input = quantity_fetched) then
+			delete from cart_item
+			where product_id = product_id_input and cart_id=cart_id_fetched;
+		--checking if quantity to be deleted is greater than quantity present in cart. If yes we print the error
 		else 
-			flag:=1;
+			dbms_output.put_line('Number of items to be deleted exceeding quantity of the product present in cart');
 		end if;
-	end loop;
-	--if product is not present in cart
-	if flag = 1 then
+		--checking if updation is required in cart table
+		if (quantity_input <= quantity_fetched) then
+			--fetching price of product to be added
+			select price into price_fetched
+			from product
+			where product_id = product_id_input;
+			--updating total cost of the cart items
+			update cart
+			set total_cost=total_cost-price_fetched*quantity_input
+			where cart_id = cart_id_fetched;
+			dbms_output.put_line('Cart Updated');
+		end if;
+	else 
 		dbms_output.put_line('Product to be deleted is not added to cart');
 	end if;
 exception
 	when no_data_found then
-		dbms_output.put_line('User not found');
+		dbms_output.put_line('You are not logged in');
 end;
 /
