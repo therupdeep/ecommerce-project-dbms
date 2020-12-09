@@ -24,10 +24,10 @@ Create a new file queries.sql for user performed queries.
 
 ### Queries to be added:-
 
-1.details of all products present in cart along with total cost of cart
-2.details of all products lesser than a particular price 
-3.details of all products lesser than a particular price and belonging to particular category
-4.details of all products belonging to particular brand
+1. details of all products present in cart along with total cost of cart
+2. details of all products lesser than a particular price 
+3. details of all products lesser than a particular price and belonging to particular category
+4. details of all products belonging to particular brand
 
 ### Example : To select details of all products in a particular category
 
