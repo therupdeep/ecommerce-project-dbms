@@ -3,11 +3,10 @@ select * from cart_item;
 select * from cart;
 
 
-select * from Product where price<1000 and category_id='ctg7';
-
 select * from Product where price<1000;
+
+select * from product where price<420 and category_id in(select category_id from category where category_name='Books');
 
 select * from Product where brand='Nestle';
 
-select * from Product where price<40000 and category_id='ctg1';
 
