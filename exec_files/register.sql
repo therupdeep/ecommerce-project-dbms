@@ -1,4 +1,5 @@
 set serveroutput on;
+set linesize 30000;
 declare 
 	Name customer.name%type;
 	Address customer.address%type;
