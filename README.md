@@ -17,19 +17,3 @@ This repository contains all the materials used in the making of the E-commerce 
 4. [ERD](https://github.com/therupdeep/ecommerce-project-dbms/blob/main/ERD.pdf)
 5. [Cardinality](https://github.com/therupdeep/ecommerce-project-dbms/blob/main/cardinality.md)
 6. [Schema](https://github.com/therupdeep/ecommerce-project-dbms/blob/main/schema.sql)
-
-## User Queries
-
-Create a new file queries.sql for user performed queries.
-
-### Queries to be added:-
-
-1. ~~details of all products present in cart along with total cost of cart~~
-2. ~~details of all products lesser than a particular price~~
-3. ~~details of all products lesser than a particular price and belonging to particular category~~
-4. ~~details of all products belonging to particular brand~~
-
-### Example : To select details of all products in a particular category
-
-select * from product where category_id in 
-(select category_id from category where category_name = 'user_input');
