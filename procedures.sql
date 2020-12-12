@@ -36,8 +36,8 @@ begin
 		new_customer_id:='cst'||1;
 		new_cart_id:='crt'||1;
 	else
-		new_customer_id:='cst'||(to_number(substr(max_customer_id,3))+1);
-		new_cart_id:='crt'||(to_number(substr(max_cart_id,3))+1);
+		new_customer_id:='cst'||(to_number(substr(max_customer_id,4))+1);
+		new_cart_id:='crt'||(to_number(substr(max_cart_id,4))+1);
 	end if;
 	insert into cart values(new_cart_id,0);
 	insert into customer values(new_customer_id,name,address,phone_number,username,password,0,new_cart_id);
