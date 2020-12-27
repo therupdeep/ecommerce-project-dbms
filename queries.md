@@ -1,7 +1,7 @@
 #### Details of all products present in cart
 
 ```sql
-select * from product where product_id in(select product_id from cart_item where (cart_id in (select cart_id from customer where username = 'user-input')));
+select product.product_id,product.product_name,product.brand,product.price,cart_item.quantity from product,cart_item where product.product_id in(select product_id from cart_item where (cart_id in (select cart_id from customer where username = 'user-input')));
 ```
 
 #### Total Cost of all items in cart 

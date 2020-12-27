@@ -65,7 +65,7 @@ end;
 /
 
 create or replace procedure addmoney(
-		amount customer.wallet%type
+	amount customer.wallet%type
 )
 as
 begin
@@ -137,8 +137,8 @@ end;
 /
 
 create or replace procedure delete_from_cart(
-	    product_id_input cart_item.product_id%type,
-	    quantity_input cart_item.quantity%type
+	product_id_input cart_item.product_id%type,
+	quantity_input cart_item.quantity%type
 )
 as
 	cart_id_fetched cart_item.cart_id%type;
@@ -187,6 +187,98 @@ begin
 		end if;
 	else 
 		dbms_output.put_line('Product to be deleted is not added to cart');
+	end if;
+exception
+	when no_data_found then
+		dbms_output.put_line('You are not logged in');
+end;
+/
+
+-- create or replace procedure cart_details
+-- as
+-- 	total_cost cart.total_cost%type;
+-- begin
+-- 	dbms_output.put_line('PROD_ID | '||'PROD_NAME            | '||'BRAND                | '||'QUANTITY | '||'PRICE  | ');
+-- 	dbms_output.put_line('----------------------------------------------------------------------------');
+-- 	for t in (select product.product_id,product.product_name,product.brand,product.price,cart_item.quantity from product,cart_item where product.product_id in(select product_id from cart_item where (cart_id in (select cart_id from customer where username = global.username)))) loop
+-- 		dbms_output.put_line(rpad(t.product_id,7,' ')||' | '||rpad(t.product_name,20,' ')||' | '||rpad(t.brand,20,' ')||' | '||rpad(t.quantity,8,' ')||' | '||rpad(t.price,6,' ')||' | ');
+-- 	end loop;
+-- 	select total_cost into total_cost
+-- 	from cart
+-- 	where cart_id in (select cart_id from customer where username = global.username);
+-- 	dbms_output.put_line('Total Cost of all items : '||total_cost);
+-- end;
+-- /
+
+create or replace procedure checkout
+as
+	quantity_fetched product.quantity%type;
+	wallet_fetched customer.wallet%type;
+	total_cost_fetched cart.total_cost%type;
+	customer_id_fetched customer.customer_id%type;
+	cart_id_fetched customer.cart_id%type;
+	date_fetched transaction.transaction_date%type;
+	max_transaction_id transaction.transaction_id%type;
+	new_transaction_id transaction.transaction_id%type;
+	flag integer:=0;
+begin
+	for t in (select * from cart_item where cart_id in(select cart_id from customer where username = global.username)) loop
+		select quantity into quantity_fetched
+		from product
+		where product_id = t.product_id;
+		if t.quantity > quantity_fetched then
+			dbms_output.put_line('Quantity of product with ID : '||t.product_id||' exceeds availability');
+			dbms_output.put_line('Current availability = '||quantity_fetched);
+			flag:=1;
+		end if;
+	end loop;
+	if flag = 0 then
+		--fetching wallet and total_cost
+		select wallet into wallet_fetched
+		from customer
+		where username=global.username;
+		select total_cost into total_cost_fetched
+		from cart
+		where cart_id in (select cart_id from customer where username=global.username);
+		if total_cost_fetched>wallet_fetched then
+			dbms_output.put_line('Payment failed. Insufficient balance in wallet');
+		else 
+			--fetch customer id and cart id
+			select customer_id,cart_id into customer_id_fetched,cart_id_fetched
+			from customer
+			where username=global.username;
+			--fetching sysdate
+			select sysdate into date_fetched from dual;
+			--updating wallet
+			update customer
+			set wallet = wallet-total_cost_fetched
+			where username = global.username;
+			dbms_output.put_line('Payment successful');
+			show_balance;
+			--decreasing availability of products
+			for t in (select * from cart_item where cart_id in(select cart_id from customer where username = global.username)) loop
+				update product
+				set quantity = quantity-t.quantity
+				where product_id=t.product_id;
+			end loop;
+			--delete items from cart
+			delete from cart_item
+			where cart_id=cart_id_fetched;
+			--updating total cost of cart
+			update cart
+			set total_cost = 0
+			where cart_id=cart_id_fetched;
+			--creating transaction_id
+			select max(transaction_id) into max_transaction_id
+			from transaction;
+			if max_transaction_id is null then
+				new_transaction_id:='trn'||1;
+			else
+				new_transaction_id:='trn'||(to_number(substr(max_transaction_id,4))+1);
+			end if;
+			insert into transaction values(new_transaction_id,date_fetched,total_cost_fetched,customer_id_fetched,cart_id_fetched);
+			dbms_output.put_line('Order placed successfully!');
+		end if;
 	end if;
 exception
 	when no_data_found then
