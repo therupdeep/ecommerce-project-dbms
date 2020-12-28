@@ -223,9 +223,11 @@ as
 	flag integer:=0;
 begin
 	for t in (select * from cart_item where cart_id in(select cart_id from customer where username = global.username)) loop
+		--fetching availability of the product
 		select quantity into quantity_fetched
 		from product
 		where product_id = t.product_id;
+		--checking if quantity of product in cart is greater than availability
 		if t.quantity > quantity_fetched then
 			dbms_output.put_line('Quantity of product with ID : '||t.product_id||' exceeds availability');
 			dbms_output.put_line('Current availability = '||quantity_fetched);
@@ -240,6 +242,7 @@ begin
 		select total_cost into total_cost_fetched
 		from cart
 		where cart_id in (select cart_id from customer where username=global.username);
+		--checking if total cost of cart is greater than amount in wallet
 		if total_cost_fetched>wallet_fetched then
 			dbms_output.put_line('Payment failed. Insufficient balance in wallet');
 		else 
@@ -276,6 +279,7 @@ begin
 			else
 				new_transaction_id:='trn'||(to_number(substr(max_transaction_id,4))+1);
 			end if;
+			--inserting into transaction table
 			insert into transaction values(new_transaction_id,date_fetched,total_cost_fetched,customer_id_fetched,cart_id_fetched);
 			dbms_output.put_line('Order placed successfully!');
 		end if;
