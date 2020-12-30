@@ -1,8 +1,4 @@
-# ERD Changes :-
-
-
-### Note : In designing ERD and implementing it we have to take care of minimum number of attributes and appropriate foreign keys. Therefore I decided to make the following changes accordingly:-
-
+# Database Schema
 
 
 ## Customer
@@ -21,7 +17,7 @@
 1. Transaction_id(PK)
 2. Transaction_date
 3. Total_Amount
-4. Customer_id(FK to Customer)
+4. Customer_id(FK to Customer(Customer_id))
 5. Cart_Id(FK to Cart(Cart_Id))
 
 ## Cart
@@ -31,7 +27,7 @@
 
 ## Cart Item
 
-1. Product_Id(PK)(FK to Product)
+1. Product_Id(PK)(FK to Product(Product_id))
 2. Cart_Id(FK to Cart(Cart_Id))
 3. Quantity
 
@@ -39,7 +35,7 @@
 
 1. Product_id(PK)
 2. Product_Name
-3. Category_id(FK to Category)
+3. Category_id(FK to Category(Category_id))
 4. Brand
 5. Quantity
 6. Price
