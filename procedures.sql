@@ -17,25 +17,32 @@ is
 	max_customer_id customer.customer_id%type;
 	max_cart_id customer.cart_id%type;
 begin
+	--selecting rows one by one
 	for t in (select username,phone_number from customer) loop
 	 if username = t.username then
+	 	--if given username already exists in the customer table
 	 	dbms_output.put_line('Enter different Username. This username already exists');
 	 	flag:=1;
 	 end if;
 	 if phone_number = t.phone_number then
+	 	--if given phone number already exists in the customer table
 	 	dbms_output.put_line('Enter different Phone Number. This phone number is taken');
 	 	flag:=1;
 	 end if;
 	 if flag = 1 then
+	 	--remaining statements are not executed
 	 	return;
 	 end if;
 	end loop;
-	select max(customer_id),max(cart_id) into max_customer_id,max_cart_id
-	from customer;
+	select max(customer_id),max(cart_id) into max_customer_id,max_cart_id from customer;
+	--if no customer exists in the customer table
 	if max_customer_id is null then
+		--creating customer id and cart id by concatenating corresponding prefix with 1
 		new_customer_id:='cst'||1;
 		new_cart_id:='crt'||1;
 	else
+		--creating customer id and cart id by concatenating corresponding prefix with (number of customers+1)
+		--for example if max(customer_id) returns cst4 then customer_id of the new user is cst5
 		new_customer_id:='cst'||(to_number(substr(max_customer_id,4))+1);
 		new_cart_id:='crt'||(to_number(substr(max_cart_id,4))+1);
 	end if;
@@ -55,11 +62,14 @@ begin
     for t in (select username,password from customer) loop
         if username = t.username and password = t.password then
             dbms_output.put_line('You are logged in');
+            --setting the global variable username to the value of the username of the current user
             global.username := username;
+            --executing show_balance procedure to show the balance in the wallet of the user
             show_balance;
             return;
         end if;
     end loop;
+    --if username and password do not match with any of the records in the customer table
     dbms_output.put_line('Login Unsuccessful');
 end;
 /
@@ -73,6 +83,8 @@ begin
 	set wallet = wallet+amount
 	where username = global.username;
 	--when updation is not successful
+	--sql%rowcount returns the number of rows affected by an insert,delete or update statement
+	--therefore if sql%rowcount is not equal to 1 i.e, if update is not successful this is executed
 	if sql%rowcount != 1 then
 		dbms_output.put_line('You are not logged in');
 	else
@@ -91,6 +103,7 @@ begin
 	where username = global.username;
 	dbms_output.put_line('Current balance : '||balance);
 exception
+	--when select query doesn't return any rows i.e, global variable username doesn't have the current username 
 	when no_data_found then
 		dbms_output.put_line('You are not logged in');
 end;
