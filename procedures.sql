@@ -245,6 +245,8 @@ begin
 		--checking if total cost of cart is greater than amount in wallet
 		if total_cost_fetched>wallet_fetched then
 			dbms_output.put_line('Payment failed. Insufficient balance in wallet');
+			dbms_output.put_line('Total cost of all items in cart : '||total_cost_fetched);
+			show_balance;
 		else 
 			--fetch customer id and cart id
 			select customer_id,cart_id into customer_id_fetched,cart_id_fetched
