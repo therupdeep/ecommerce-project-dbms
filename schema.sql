@@ -35,7 +35,7 @@ create table Product
 (
     product_id varchar(7) constraint pk5 primary key,
     product_name varchar(40) not null,
-    brand varchar(30) not null,
+    brand varchar(20) not null,
     quantity number(2) not null,
     price number(6) not null,
     category_id varchar(7) not null constraint fk4 references Category(category_id)
