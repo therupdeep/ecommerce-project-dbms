@@ -1,5 +1,5 @@
 set serveroutput on;
-set linesize 30000;
+set linesize 3000;
 declare 
 	Username customer.username%type;
 	Password customer.password%type;

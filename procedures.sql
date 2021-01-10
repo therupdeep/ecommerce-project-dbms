@@ -3,6 +3,12 @@ create or replace package global as
 end global;
 /
 
+create or replace package query as
+	category_id category.category_id%type;
+	brand product.brand%type;
+end query;
+/
+
 create or replace procedure register(
 	name customer.name%type,
 	address customer.address%type,
@@ -302,5 +308,68 @@ begin
 exception
 	when no_data_found then
 		dbms_output.put_line('You are not logged in');
+end;
+/
+
+create or replace procedure view_category
+as
+begin
+	dbms_output.put_line('ALL CATEGORIES AVAILABLE :- '||chr(10));
+	dbms_output.put_line(rpad('CATEGORY_ID',11,' ')||' | '||rpad('CATEGORY_NAME',40,' '));
+	dbms_output.put_line('---------------------------------------------------------------------------------------------');
+	for t in (select * from category) loop
+		dbms_output.put_line(rpad(t.category_id,11,' ')||' | '||rpad(t.category_name,40,' '));
+	end loop;
+end;
+/
+
+create or replace procedure view_brand
+as
+	category_name_fetched category.category_name%type;
+begin
+	select category_name into category_name_fetched
+	from category
+	where category_id=query.category_id;
+	dbms_output.put_line(chr(10)||'ALL BRANDS AVAILABLE IN CATEGORY : '||category_name_fetched||' :-'||chr(10));
+	dbms_output.put_line(rpad('BRAND',20,' '));
+	dbms_output.put_line('----------------------------------------------------------');
+	for t in (select brand from product where category_id=query.category_id) loop
+		dbms_output.put_line(rpad(t.brand,20,' '));
+	end loop;
+end;
+/
+
+create or replace procedure view_product_by_brand
+as
+	category_name_fetched category.category_name%type;
+begin
+	select category_name into category_name_fetched
+	from category
+	where category_id=query.category_id;
+	dbms_output.put_line(chr(10)||'ALL PRODUCTS AVAILABLE IN CATEGORY : '||category_name_fetched||' and BRAND : '||query.brand||' :-'||chr(10));
+	dbms_output.put_line(rpad('PRODUCT_ID',10,' ')||' | '||rpad('PRODUCT_NAME',40,' ')||' | '||rpad('BRAND',20,' ')||' | '||rpad('QUANTITY',8,' ')||' | '||rpad('PRICE',6,' ')||' | '||rpad('CATEGORY_NAME',40,' '));
+	dbms_output.put_line('---------------------------------------------------------------------------------------------------------------------------------');
+	for t in (select product.product_id,product.product_name,product.brand,product.quantity,product.price,category.category_name from product,category where product.category_id=category.category_id and product.category_id=query.category_id and product.brand=query.brand) loop
+		dbms_output.put_line(rpad(t.product_id,10,' ')||' | '||rpad(t.product_name,40,' ')||' | '||rpad(t.brand,20,' ')||' | '||rpad(t.quantity,8,' ')||' | '||rpad(t.price,6,' ')||' | '||rpad(t.category_name,40,' '));
+	end loop;
+end;
+/
+
+create or replace procedure view_product_by_price(
+	lower_range product.price%type,
+	upper_range product.price%type
+)
+as
+	category_name_fetched category.category_name%type;
+begin
+	select category_name into category_name_fetched
+	from category
+	where category_id=query.category_id;
+	dbms_output.put_line(chr(10)||'ALL PRODUCTS AVAILABLE IN CATEGORY : '||category_name_fetched||' and BRAND : '||query.brand||' and price range : '||lower_range||' to '||upper_range||' :-'||chr(10));
+	dbms_output.put_line(rpad('PRODUCT_ID',10,' ')||' | '||rpad('PRODUCT_NAME',40,' ')||' | '||rpad('BRAND',20,' ')||' | '||rpad('QUANTITY',8,' ')||' | '||rpad('PRICE',6,' ')||' | '||rpad('CATEGORY_NAME',40,' '));
+	dbms_output.put_line('---------------------------------------------------------------------------------------------------------------------------------');
+	for t in (select product.product_id,product.product_name,product.brand,product.quantity,product.price,category.category_name from product,category where product.category_id=category.category_id and product.category_id=query.category_id and product.brand=query.brand and product.price between lower_range and upper_range) loop
+		dbms_output.put_line(rpad(t.product_id,10,' ')||' | '||rpad(t.product_name,40,' ')||' | '||rpad(t.brand,20,' ')||' | '||rpad(t.quantity,8,' ')||' | '||rpad(t.price,6,' ')||' | '||rpad(t.category_name,40,' '));
+	end loop;
 end;
 /
