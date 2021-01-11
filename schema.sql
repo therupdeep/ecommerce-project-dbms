@@ -28,7 +28,7 @@ create table Transaction
 create table Category
 (
 	category_id varchar(7) constraint pk4 primary key,
-	category_name varchar(40) not null
+	category_name varchar(20) not null
 );
 
 create table Product

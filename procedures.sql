@@ -149,6 +149,7 @@ begin
 	set total_cost=total_cost+price_fetched*quantity_input
 	where cart_id = cart_id_fetched;
 	dbms_output.put_line('Cart Updated');
+	view_cart;
 exception
 	when no_data_found then
 		dbms_output.put_line('You are not logged in');
@@ -203,6 +204,7 @@ begin
 			set total_cost=total_cost-price_fetched*quantity_input
 			where cart_id = cart_id_fetched;
 			dbms_output.put_line('Cart Updated');
+			view_cart;
 		end if;
 	else 
 		dbms_output.put_line('Product to be deleted is not added to cart');
@@ -212,22 +214,6 @@ exception
 		dbms_output.put_line('You are not logged in');
 end;
 /
-
--- create or replace procedure cart_details
--- as
--- 	total_cost cart.total_cost%type;
--- begin
--- 	dbms_output.put_line('PROD_ID | '||'PROD_NAME            | '||'BRAND                | '||'QUANTITY | '||'PRICE  | ');
--- 	dbms_output.put_line('----------------------------------------------------------------------------');
--- 	for t in (select product.product_id,product.product_name,product.brand,product.price,cart_item.quantity from product,cart_item where product.product_id in(select product_id from cart_item where (cart_id in (select cart_id from customer where username = global.username)))) loop
--- 		dbms_output.put_line(rpad(t.product_id,7,' ')||' | '||rpad(t.product_name,20,' ')||' | '||rpad(t.brand,20,' ')||' | '||rpad(t.quantity,8,' ')||' | '||rpad(t.price,6,' ')||' | ');
--- 	end loop;
--- 	select total_cost into total_cost
--- 	from cart
--- 	where cart_id in (select cart_id from customer where username = global.username);
--- 	dbms_output.put_line('Total Cost of all items : '||total_cost);
--- end;
--- /
 
 create or replace procedure checkout
 as
@@ -315,15 +301,15 @@ create or replace procedure view_category
 as
 begin
 	dbms_output.put_line('ALL CATEGORIES AVAILABLE :- '||chr(10));
-	dbms_output.put_line(rpad('CATEGORY_ID',11,' ')||' | '||rpad('CATEGORY_NAME',40,' '));
+	dbms_output.put_line(rpad('CATEGORY_ID',11,' ')||' | '||rpad('CATEGORY_NAME',20,' '));
 	dbms_output.put_line('---------------------------------------------------------------------------------------------');
 	for t in (select * from category) loop
-		dbms_output.put_line(rpad(t.category_id,11,' ')||' | '||rpad(t.category_name,40,' '));
+		dbms_output.put_line(rpad(t.category_id,11,' ')||' | '||rpad(t.category_name,20,' '));
 	end loop;
 end;
 /
 
-create or replace procedure view_brand
+create or replace procedure view_brand_in_category
 as
 	category_name_fetched category.category_name%type;
 begin
@@ -339,7 +325,7 @@ begin
 end;
 /
 
-create or replace procedure view_product_by_brand
+create or replace procedure view_prod_by_brand_category
 as
 	category_name_fetched category.category_name%type;
 begin
@@ -347,15 +333,15 @@ begin
 	from category
 	where category_id=query.category_id;
 	dbms_output.put_line(chr(10)||'ALL PRODUCTS AVAILABLE IN CATEGORY : '||category_name_fetched||' and BRAND : '||query.brand||' :-'||chr(10));
-	dbms_output.put_line(rpad('PRODUCT_ID',10,' ')||' | '||rpad('PRODUCT_NAME',40,' ')||' | '||rpad('BRAND',20,' ')||' | '||rpad('QUANTITY',8,' ')||' | '||rpad('PRICE',6,' ')||' | '||rpad('CATEGORY_NAME',40,' '));
+	dbms_output.put_line(rpad('PRODUCT_ID',10,' ')||' | '||rpad('PRODUCT_NAME',40,' ')||' | '||rpad('CATEGORY_NAME',20,' ')||' | '||rpad('BRAND',20,' ')||' | '||rpad('PRICE',6,' ')||' | '||rpad('QUANTITY',8,' '));
 	dbms_output.put_line('---------------------------------------------------------------------------------------------------------------------------------');
 	for t in (select product.product_id,product.product_name,product.brand,product.quantity,product.price,category.category_name from product,category where product.category_id=category.category_id and product.category_id=query.category_id and product.brand=query.brand) loop
-		dbms_output.put_line(rpad(t.product_id,10,' ')||' | '||rpad(t.product_name,40,' ')||' | '||rpad(t.brand,20,' ')||' | '||rpad(t.quantity,8,' ')||' | '||rpad(t.price,6,' ')||' | '||rpad(t.category_name,40,' '));
+		dbms_output.put_line(rpad(t.product_id,10,' ')||' | '||rpad(t.product_name,40,' ')||' | '||rpad(t.category_name,20,' ')||' | '||rpad(t.brand,20,' ')||' | '||rpad(t.price,6,' ')||' | '||rpad(t.quantity,8,' '));
 	end loop;
 end;
 /
 
-create or replace procedure view_product_by_price(
+create or replace procedure view_prod_by_price_brand_ctg(
 	lower_range product.price%type,
 	upper_range product.price%type
 )
@@ -366,10 +352,27 @@ begin
 	from category
 	where category_id=query.category_id;
 	dbms_output.put_line(chr(10)||'ALL PRODUCTS AVAILABLE IN CATEGORY : '||category_name_fetched||' and BRAND : '||query.brand||' and price range : '||lower_range||' to '||upper_range||' :-'||chr(10));
-	dbms_output.put_line(rpad('PRODUCT_ID',10,' ')||' | '||rpad('PRODUCT_NAME',40,' ')||' | '||rpad('BRAND',20,' ')||' | '||rpad('QUANTITY',8,' ')||' | '||rpad('PRICE',6,' ')||' | '||rpad('CATEGORY_NAME',40,' '));
+	dbms_output.put_line(rpad('PRODUCT_ID',10,' ')||' | '||rpad('PRODUCT_NAME',40,' ')||' | '||rpad('CATEGORY_NAME',20,' ')||' | '||rpad('BRAND',20,' ')||' | '||rpad('PRICE',6,' ')||' | '||rpad('QUANTITY',8,' '));
 	dbms_output.put_line('---------------------------------------------------------------------------------------------------------------------------------');
 	for t in (select product.product_id,product.product_name,product.brand,product.quantity,product.price,category.category_name from product,category where product.category_id=category.category_id and product.category_id=query.category_id and product.brand=query.brand and product.price between lower_range and upper_range) loop
-		dbms_output.put_line(rpad(t.product_id,10,' ')||' | '||rpad(t.product_name,40,' ')||' | '||rpad(t.brand,20,' ')||' | '||rpad(t.quantity,8,' ')||' | '||rpad(t.price,6,' ')||' | '||rpad(t.category_name,40,' '));
+		dbms_output.put_line(rpad(t.product_id,10,' ')||' | '||rpad(t.product_name,40,' ')||' | '||rpad(t.category_name,20,' ')||' | '||rpad(t.brand,20,' ')||' | '||rpad(t.price,6,' ')||' | '||rpad(t.quantity,8,' '));
 	end loop;
+end;
+/
+
+create or replace procedure view_cart
+as
+	grand_total cart.total_cost%type;
+begin
+	select total_cost into grand_total
+	from cart
+	where cart_id in(select cart_id from customer where username = global.username);
+	dbms_output.put_line('ALL ITEMS IN CART :- '||chr(10));
+	dbms_output.put_line(rpad('PRODUCT_ID',10,' ')||' | '||rpad('PRODUCT_NAME',40,' ')||' | '||rpad('CATEGORY_NAME',20,' ')||' | '||rpad('BRAND',20,' ')||' | '||rpad('PRICE',6,' ')||' | '||rpad('QUANTITY',8,' ')||' | '||rpad('TOTAL',7,' '));
+	dbms_output.put_line('-----------------------------------------------------------------------------------------------------------------------------------------------');
+	for t in (select product.product_id,product.product_name,product.brand,product.price,category.category_name,cart_item.quantity,product.price*cart_item.quantity total from product,cart_item,category where product.product_id=cart_item.product_id and product.category_id=category.category_id and product.product_id in(select product_id from cart_item where (cart_id in (select cart_id from customer where username = global.username)))) loop
+		dbms_output.put_line(rpad(t.product_id,10,' ')||' | '||rpad(t.product_name,40,' ')||' | '||rpad(t.category_name,20,' ')||' | '||rpad(t.brand,20,' ')||' | '||rpad(t.price,6,' ')||' | '||rpad(t.quantity,8,' ')||' | '||rpad(t.total,7,' '));
+	end loop;
+	dbms_output.put_line(chr(10)||'GRAND TOTAL OF ALL ITEMS : '||grand_total);
 end;
 /

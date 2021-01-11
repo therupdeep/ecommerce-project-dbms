@@ -7,7 +7,7 @@ declare
 begin
 	category_id:='&category_id';
 	query.category_id:=category_id;
-	view_brand;
+	view_brand_in_category;
 end;
 /
 declare
@@ -15,7 +15,7 @@ declare
 begin
 	brand:='&brand';
 	query.brand:=brand;
-	view_product_by_brand;
+	view_prod_by_brand_category;
 end;
 /
 declare
@@ -24,6 +24,6 @@ declare
 begin
 	lower_range:='&lower_range';
 	upper_range:='&upper_range';
-	view_product_by_price(lower_range,upper_range);
+	view_prod_by_price_brand_ctg(lower_range,upper_range);
 end;
 /
