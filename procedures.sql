@@ -27,6 +27,7 @@ begin
 	for t in (select email_id,phone_number from customer) loop
 	if (substr(email_id,-10,10)!='@gmail.com') || substr(email_id,-10,10)!='@yahoo.com')) then
 	flag:=1;
+	end if;
 	 if email_id = t.email_id then
 	 	--if given email_id already exists in the customer table
 	 	dbms_output.put_line('Enter different Email ID. This email id already exists');
