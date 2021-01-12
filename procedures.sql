@@ -12,8 +12,8 @@ end query;
 create or replace procedure register(
 	name customer.name%type,
 	address customer.address%type,
+	email_id customer.email_id%type;
 	phone_number customer.phone_number%type,
-	username customer.username%type,
 	password customer.password%type
 ) 
 is
@@ -24,10 +24,10 @@ is
 	max_cart_id customer.cart_id%type;
 begin
 	--selecting rows one by one
-	for t in (select username,phone_number from customer) loop
-	 if username = t.username then
-	 	--if given username already exists in the customer table
-	 	dbms_output.put_line('Enter different Username. This username already exists');
+	for t in (select email_id,phone_number from customer) loop
+	 if email_id = t.email_id then
+	 	--if given email_id already exists in the customer table
+	 	dbms_output.put_line('Enter different Email ID. This email id already exists');
 	 	flag:=1;
 	 end if;
 	 if phone_number = t.phone_number then
