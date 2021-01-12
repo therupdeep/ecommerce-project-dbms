@@ -1,5 +1,7 @@
 set serveroutput on;
 set linesize 3000;
+accept email_id prompt 'Enter a valid email_id : ';
+accept phone_number prompt 'Enter a valid phone number : ';
 declare 
 	Name customer.name%type;
 	Address customer.address%type;
@@ -9,8 +11,6 @@ declare
 begin
 	Name := '&Name';
 	Address := '&Address';
-14
-        Username := '&Username';
 	Email_id := '&Email_id';
 	Phone_Number := '&Phone_Number';
 	Password := '&Password';
