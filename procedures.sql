@@ -72,7 +72,7 @@ begin
         if email_id = t.email_id and password = t.password then
             dbms_output.put_line('You are logged in');
             --setting the global variable username to the value of the username of the current user
-            global.email_id := username;
+            global.email_id := email_id;
             --executing show_balance procedure to show the balance in the wallet of the user
             show_balance;
             return;
