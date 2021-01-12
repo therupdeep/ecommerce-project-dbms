@@ -8,10 +8,9 @@
 3. Phone_no
 4. Address
 5. Cart_Id(FK to Cart(Cart_Id))
-6. Username
-7. Password
-8. Wallet
-9. Email_id
+6. Password
+7. Wallet
+8. Email_id
 
 ## Transaction
 
