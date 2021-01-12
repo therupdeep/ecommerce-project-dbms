@@ -12,7 +12,7 @@ end query;
 create or replace procedure register(
 	name customer.name%type,
 	address customer.address%type,
-	email_id customer.email_id%type;
+	email_id customer.email_id%type,
 	phone_number customer.phone_number%type,
 	password customer.password%type
 ) 
@@ -23,13 +23,20 @@ is
 	max_customer_id customer.customer_id%type;
 	max_cart_id customer.cart_id%type;
 begin
+	if email_id not like '%_@__%.__%' then
+		dbms_output.put_line(chr(10)||'Please enter a valid email address');
+		return;
+	end if;
+	if length(phone_number)!=10 then
+		dbms_output.put_line(chr(10)||'Please enter a 10 digit phone number');
+		return;
+	end if;
+	if length(password)<6 or length(password)>10 then
+		dbms_output.put_line(chr(10)||'Password should be atleast of 6 characters and maximum 10 characters');
+		return;
+	end if;
 	--selecting rows one by one
 	for t in (select email_id,phone_number from customer) loop
-	 if (substr(email_id,-10,10)!='@gmail.com') || substr(email_id,-10,10)!='@yahoo.com')) then
-	 	--add output. Also email id checking includes every email id not only gmail and yahoo
-	 	--check if there is something present before @,@ is there,something is present after @,check for .,check if something is present after .
-	 	flag:=1;
-	 end if;
 	 if email_id = t.email_id then
 	 	--if given email_id already exists in the customer table
 	 	dbms_output.put_line('Enter different Email ID. This email id already exists');

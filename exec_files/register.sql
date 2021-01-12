@@ -1,8 +1,8 @@
 set serveroutput on;
 set linesize 3000;
-accept email_id prompt 'Enter a valid email_id : ';
-accept phone_number prompt 'Enter a valid phone number : ';
-accept password prompt 'Enter a password of atleast 7 characters and max 10 characters : ';
+accept Email_id prompt 'Enter a valid Email Address : ';
+accept Phone_Number prompt 'Enter a 10 digit Phone Number : ';
+accept Password prompt 'Enter a password of atleast 6 characters and maximum 10 characters : ';
 declare 
 	Name customer.name%type;
 	Address customer.address%type;
