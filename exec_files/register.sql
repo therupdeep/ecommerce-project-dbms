@@ -5,7 +5,6 @@ declare
 	Address customer.address%type;
 	Email_id customer.email_id%type;
 	Phone_Number customer.phone_number%type;
-	Username customer.username%type;
 	Password customer.password%type;
 begin
 	Name := '&Name';
@@ -14,6 +13,6 @@ begin
 	Phone_Number := '&Phone_Number';
 	Username := '&Username';
 	Password := '&Password';
-	register(Name,Address,Email_id,Phone_Number,Username,Password);
+	register(Name,Address,Email_id,Phone_Number,Password);
 end;
 /
