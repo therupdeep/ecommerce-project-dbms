@@ -90,7 +90,7 @@ as
 begin
 	update customer
 	set wallet = wallet+amount
-	where username = global.username;
+	where email_id = global.email_id;
 	--when updation is not successful
 	--sql%rowcount returns the number of rows affected by an insert,delete or update statement
 	--therefore if sql%rowcount is not equal to 1 i.e, if update is not successful this is executed
@@ -109,7 +109,7 @@ as
 begin
 	select wallet into balance
 	from customer
-	where username = global.username;
+	where email_id = global.email_id;
 	dbms_output.put_line('Current balance : '||balance);
 exception
 	--when select query doesn't return any rows i.e, global variable username doesn't have the current username 
@@ -130,7 +130,7 @@ begin
 	--fetching cart_id of the current customer
 	select cart_id into cart_id_fetched
 	from customer
-	where username = global.username;
+	where email_id = global.email_id;
 	--fetching price of product to be added
 	select price into price_fetched
 	from product
@@ -172,7 +172,7 @@ begin
 	--fetching cart_id of the current customer
 	select cart_id into cart_id_fetched
 	from customer
-	where username = global.username;
+	where email_id = global.email_id;
 	--fetching count of rows containing the particular product in the current cart of the user
 	select count(*) into flag
 	from cart_item
@@ -230,7 +230,7 @@ as
 	new_transaction_id transaction.transaction_id%type;
 	flag integer:=0;
 begin
-	for t in (select * from cart_item where cart_id in(select cart_id from customer where username = global.username)) loop
+	for t in (select * from cart_item where cart_id in(select cart_id from customer where email_id = global.email_id)) loop
 		--fetching availability of the product
 		select quantity into quantity_fetched
 		from product
@@ -249,7 +249,7 @@ begin
 		where email_id=global.email_id;
 		select total_cost into total_cost_fetched
 		from cart
-		where cart_id in (select cart_id from customer where username=global.username);
+		where cart_id in (select cart_id from customer where email_id=global.email_id);
 		--checking if total cost of cart is greater than amount in wallet
 		if total_cost_fetched>wallet_fetched then
 			dbms_output.put_line('Payment failed. Insufficient balance in wallet');
@@ -259,17 +259,17 @@ begin
 			--fetch customer id and cart id
 			select customer_id,cart_id into customer_id_fetched,cart_id_fetched
 			from customer
-			where username=global.username;
+			where email_id=global.email_id;
 			--fetching sysdate
 			select sysdate into date_fetched from dual;
 			--updating wallet
 			update customer
 			set wallet = wallet-total_cost_fetched
-			where username = global.username;
+			where email_id = global.email_id;
 			dbms_output.put_line('Payment successful');
 			show_balance;
 			--decreasing availability of products
-			for t in (select * from cart_item where cart_id in(select cart_id from customer where username = global.username)) loop
+			for t in (select * from cart_item where cart_id in(select cart_id from customer where email_id = global.email_id)) loop
 				update product
 				set quantity = quantity-t.quantity
 				where product_id=t.product_id;
