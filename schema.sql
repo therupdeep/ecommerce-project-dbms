@@ -10,7 +10,6 @@ create table Customer
     name varchar(30) not null,
     address varchar(40) not null,
     phone_number number(10) not null,
-    username varchar(20) not null,
     password varchar(20) not null,
     wallet number(7) not null,
     cart_id varchar(7) not null constraint fk1 references Cart(cart_id)
