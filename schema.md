@@ -11,6 +11,7 @@
 6. Username
 7. Password
 8. Wallet
+9. Email_id
 
 ## Transaction
 
