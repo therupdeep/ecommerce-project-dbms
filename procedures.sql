@@ -246,7 +246,7 @@ begin
 		--fetching wallet and total_cost
 		select wallet into wallet_fetched
 		from customer
-		where username=global.username;
+		where email_id=global.email_id;
 		select total_cost into total_cost_fetched
 		from cart
 		where cart_id in (select cart_id from customer where username=global.username);
@@ -369,11 +369,11 @@ as
 begin
 	select total_cost into grand_total
 	from cart
-	where cart_id in(select cart_id from customer where username = global.username);
+	where cart_id in(select cart_id from customer where email_id = global.email_id);
 	dbms_output.put_line('ALL ITEMS IN CART :- '||chr(10));
 	dbms_output.put_line(rpad('PRODUCT_ID',10,' ')||' | '||rpad('PRODUCT_NAME',40,' ')||' | '||rpad('CATEGORY_NAME',20,' ')||' | '||rpad('BRAND',20,' ')||' | '||rpad('PRICE',6,' ')||' | '||rpad('QUANTITY',8,' ')||' | '||rpad('TOTAL',7,' '));
 	dbms_output.put_line('-----------------------------------------------------------------------------------------------------------------------------------------------');
-	for t in (select product.product_id,product.product_name,product.brand,product.price,category.category_name,cart_item.quantity,product.price*cart_item.quantity total from product,cart_item,category where product.product_id=cart_item.product_id and product.category_id=category.category_id and product.product_id in(select product_id from cart_item where (cart_id in (select cart_id from customer where username = global.username)))) loop
+	for t in (select product.product_id,product.product_name,product.brand,product.price,category.category_name,cart_item.quantity,product.price*cart_item.quantity total from product,cart_item,category where product.product_id=cart_item.product_id and product.category_id=category.category_id and product.product_id in(select product_id from cart_item where (cart_id in (select cart_id from customer where username = global.email_id)))) loop
 		dbms_output.put_line(rpad(t.product_id,10,' ')||' | '||rpad(t.product_name,40,' ')||' | '||rpad(t.category_name,20,' ')||' | '||rpad(t.brand,20,' ')||' | '||rpad(t.price,6,' ')||' | '||rpad(t.quantity,8,' ')||' | '||rpad(t.total,7,' '));
 	end loop;
 	dbms_output.put_line(chr(10)||'GRAND TOTAL OF ALL ITEMS : '||grand_total);
