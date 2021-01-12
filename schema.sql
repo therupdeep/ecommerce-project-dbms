@@ -14,6 +14,7 @@ create table Customer
     password varchar(20) not null,
     wallet number(7) not null,
     cart_id varchar(7) not null constraint fk1 references Cart(cart_id)
+    email_id varchar(20) not null;
 );
 
 create table Transaction
