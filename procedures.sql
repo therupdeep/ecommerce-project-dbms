@@ -1,5 +1,5 @@
 create or replace package global as
-	username customer.username%type;
+	email_id customer.email_id%type;
 end global;
 /
 
@@ -63,16 +63,16 @@ end;
 /
 
 create or replace procedure login(
-    username customer.username%type,
+    email_id customer.email_id%type,
 	password customer.password%type
 )
 as
 begin 
-    for t in (select username,password from customer) loop
-        if username = t.username and password = t.password then
+    for t in (select email_id,password from customer) loop
+        if email_id = t.email_id and password = t.password then
             dbms_output.put_line('You are logged in');
             --setting the global variable username to the value of the username of the current user
-            global.username := username;
+            global.email_id := username;
             --executing show_balance procedure to show the balance in the wallet of the user
             show_balance;
             return;
