@@ -2,6 +2,7 @@ set serveroutput on;
 set linesize 3000;
 accept email_id prompt 'Enter a valid email_id : ';
 accept phone_number prompt 'Enter a valid phone number : ';
+accept password prompt 'Enter a password of atleast 7 characters with a mixture of letters and numbers : ';
 declare 
 	Name customer.name%type;
 	Address customer.address%type;
