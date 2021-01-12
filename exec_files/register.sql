@@ -9,9 +9,10 @@ declare
 begin
 	Name := '&Name';
 	Address := '&Address';
+14
+        Username := '&Username';
 	Email_id := '&Email_id';
 	Phone_Number := '&Phone_Number';
-	Username := '&Username';
 	Password := '&Password';
 	register(Name,Address,Email_id,Phone_Number,Password);
 end;
