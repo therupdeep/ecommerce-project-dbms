@@ -1,11 +1,11 @@
 set serveroutput on;
 set linesize 3000;
 declare 
-	Username customer.username%type;
+	Email_id customer.email_id%type;
 	Password customer.password%type;
 begin
-	Username := '&Username';
+	Email_id := '&Email_id';
 	Password := '&Password';
-	login(Username,Password);
+	login(Email_id,Password);
 end;
 /
