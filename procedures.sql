@@ -25,14 +25,17 @@ is
 begin
 	if email_id not like '%_@__%.__%' then
 		dbms_output.put_line(chr(10)||'Please enter a valid email address');
-		return;
+		flag:=1;
 	end if;
 	if length(phone_number)!=10 then
 		dbms_output.put_line(chr(10)||'Please enter a 10 digit phone number');
-		return;
+		flag:=1;
 	end if;
 	if length(password)<6 or length(password)>10 then
 		dbms_output.put_line(chr(10)||'Password should be atleast of 6 characters and maximum 10 characters');
+		flag:=1;
+	end if;
+	if flag = 1 then
 		return;
 	end if;
 	--selecting rows one by one
@@ -80,14 +83,14 @@ begin
     for t in (select email_id,password from customer) loop
         if email_id = t.email_id and password = t.password then
             dbms_output.put_line('You are logged in');
-            --setting the global variable username to the value of the username of the current user
+            --setting the global variable email to the value of the email of the current user
             global.email_id := email_id;
             --executing show_balance procedure to show the balance in the wallet of the user
             show_balance;
             return;
         end if;
     end loop;
-    --if username and password do not match with any of the records in the customer table
+    --if email and password do not match with any of the records in the customer table
     dbms_output.put_line('Login Unsuccessful');
 end;
 /
@@ -121,7 +124,7 @@ begin
 	where email_id = global.email_id;
 	dbms_output.put_line('Current balance : '||balance);
 exception
-	--when select query doesn't return any rows i.e, global variable username doesn't have the current username 
+	--when select query doesn't return any rows i.e, global variable email doesn't have the current email 
 	when no_data_found then
 		dbms_output.put_line('You are not logged in');
 end;
