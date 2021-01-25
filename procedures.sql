@@ -242,6 +242,7 @@ as
 	new_transaction_id transaction.transaction_id%type;
 	flag integer:=0;
 begin
+	view_cart;
 	for t in (select * from cart_item where cart_id in(select cart_id from customer where email_id = global.email_id)) loop
 		--fetching availability of the product
 		select quantity into quantity_fetched
