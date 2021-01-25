@@ -122,7 +122,7 @@ begin
 	select wallet into balance
 	from customer
 	where email_id = global.email_id;
-	dbms_output.put_line('Current balance : '||balance);
+	dbms_output.put_line('Current balance in wallet : '||balance);
 exception
 	--when select query doesn't return any rows i.e, global variable email doesn't have the current email 
 	when no_data_found then
