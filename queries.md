@@ -27,5 +27,3 @@ select product.product_id,product.product_name,product.brand,product.quantity,pr
 ```sql
 select product.product_id,product.product_name,product.brand,product.quantity,product.price,category.category_name from Product,category where product.category_id=category.category_id and brand='user-input';
 ```
-
-
