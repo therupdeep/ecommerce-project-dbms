@@ -1,6 +1,6 @@
 # ecommerce-project-dbms
 
-This repository contains all the materials used in the making of the E-commerce DBMS-SQL project assigned to us during our elective course INFO3132(Distributed DBMS). 
+This repository contains the source code used in the making of an E-commerce DBMS-SQL project. <!-- assigned to us during our elective course INFO3132(Distributed DBMS). -->
 
 ## Important Stuff
 
